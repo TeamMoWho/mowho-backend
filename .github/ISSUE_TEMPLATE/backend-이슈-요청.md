@@ -1,13 +1,4 @@
 ---
-name: BackEnd 이슈 요청
-about: BackEnd 이슈 요청 템플릿
-title: ''
-labels: ''
-assignees: ''
-
----
-
----
 name: 이슈 요청
 
 about: BE 이슈 템플릿
