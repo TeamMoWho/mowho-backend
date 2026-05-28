@@ -1,6 +1,7 @@
 package team.mowho.backend.domain.member.application.command;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import team.mowho.backend.domain.member.application.dto.request.MemberRegisterSe
 import team.mowho.backend.domain.member.application.dto.response.MemberRegisterResponse;
 import team.mowho.backend.domain.member.domain.Member;
 import team.mowho.backend.domain.member.domain.MemberRepository;
+import team.mowho.backend.domain.member.domain.exception.DuplicateMemberException;
 
 @RequiredArgsConstructor
 @Service
@@ -28,7 +30,11 @@ public class MemberCommandService {
                 request.nickname(),
                 request.phoneNumber()
         );
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateMemberException();
+        }
 
         return MemberRegisterResponse.builder()
                 .memberId(member.getId())
