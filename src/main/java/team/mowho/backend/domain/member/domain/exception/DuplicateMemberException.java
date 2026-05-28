@@ -4,8 +4,8 @@ import team.mowho.backend.global.exception.CustomException;
 
 public class DuplicateMemberException extends CustomException {
 
-    public DuplicateMemberException() {
-        super(MemberExceptionCode.DUPLICATE_MEMBER);
+    public DuplicateMemberException(Throwable cause) {
+        super(MemberExceptionCode.DUPLICATE_MEMBER, cause);
     }
 
 }

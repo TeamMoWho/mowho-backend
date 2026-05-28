@@ -33,7 +33,7 @@ public class MemberCommandService {
         try {
             memberRepository.save(member);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateMemberException();
+            throw new DuplicateMemberException(e);
         }
 
         return MemberRegisterResponse.builder()
