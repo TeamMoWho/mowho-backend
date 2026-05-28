@@ -47,8 +47,7 @@ public class Member extends BaseTimeEntity {
             String email,
             String password,
             String nickname,
-            String phoneNumber,
-            MemberRole memberRole
+            String phoneNumber
     ) {
         return Member.builder()
                 .loginId(loginId)
@@ -56,7 +55,7 @@ public class Member extends BaseTimeEntity {
                 .password(password)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
-                .memberRole(memberRole)
+                .memberRole(MemberRole.MEMBER)
                 .build();
     }
 

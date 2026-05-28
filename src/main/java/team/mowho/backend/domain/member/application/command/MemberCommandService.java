@@ -8,7 +8,6 @@ import team.mowho.backend.domain.member.application.dto.request.MemberRegisterSe
 import team.mowho.backend.domain.member.application.dto.response.MemberRegisterResponse;
 import team.mowho.backend.domain.member.domain.Member;
 import team.mowho.backend.domain.member.domain.MemberRepository;
-import team.mowho.backend.domain.member.domain.MemberRole;
 
 @RequiredArgsConstructor
 @Service
@@ -27,8 +26,7 @@ public class MemberCommandService {
                 request.email(),
                 passwordEncoder.encode(request.password()),
                 request.nickname(),
-                request.phoneNumber(),
-                MemberRole.MEMBER
+                request.phoneNumber()
         );
         memberRepository.save(member);
 
