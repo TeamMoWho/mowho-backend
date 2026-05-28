@@ -38,12 +38,17 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberRole memberRole;
+
     public static Member register(
             String loginId,
             String email,
             String password,
             String nickname,
-            String phoneNumber
+            String phoneNumber,
+            MemberRole memberRole
     ) {
         return Member.builder()
                 .loginId(loginId)
@@ -51,6 +56,7 @@ public class Member extends BaseTimeEntity {
                 .password(password)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
+                .memberRole(memberRole)
                 .build();
     }
 
