@@ -1,6 +1,7 @@
 package team.mowho.backend.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -61,9 +62,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode status,
             WebRequest request
     ) {
-        String message = exception.getAllValidationResults().stream()
-                .flatMap(result -> result.getResolvableErrors().stream()
-                        .map(error -> result.getMethodParameter().getParameterName() + ": " + error.getDefaultMessage()))
+        String message = exception.getAllErrors().stream()
+                .map(MessageSourceResolvable::getDefaultMessage)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(", "));
 
@@ -80,6 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request
     ) {
         String message = exception.getFieldErrors().stream()
+                .filter(error -> error.getDefaultMessage() != null)
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
