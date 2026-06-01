@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.mowho.backend.domain.auth.domain.exception.RefreshTokenNotFoundException;
 import team.mowho.backend.domain.auth.domain.exception.RefreshTokenNotValidException;
 import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshToken;
@@ -24,6 +25,7 @@ public class RefreshTokenCommandService {
     private final TokenProperties tokenProperties;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public TokenResponse reissue(HttpServletRequest request, HttpServletResponse response) {
         String refreshTokenStr = tokenResolver.resolveRefreshTokenFromRequest(request)
                 .orElseThrow(RefreshTokenNotFoundException::new);
