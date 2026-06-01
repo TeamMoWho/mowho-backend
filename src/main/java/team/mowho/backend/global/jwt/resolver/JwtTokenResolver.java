@@ -24,7 +24,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class JwtTokenResolver {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final Pattern BEARER_PATTERN = Pattern.compile("^Bearer .*");
 
     private final SecretKey secretKey;
 
@@ -52,8 +51,9 @@ public class JwtTokenResolver {
 
     private static Optional<String> resolveFromHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(AUTHORIZATION))
-                .filter(auth -> StringUtils.hasText(auth) && BEARER_PATTERN.matcher(auth).matches())
-                .map(auth -> auth.substring(BEARER_PREFIX.length()));
+                .filter(auth -> StringUtils.hasText(auth) && auth.startsWith(BEARER_PREFIX))
+                .map(auth -> auth.substring(BEARER_PREFIX.length()).trim())
+                .filter(StringUtils::hasText);
     }
 
     private Optional<String> resolveFromCookie(HttpServletRequest request, TokenType tokenType) {
