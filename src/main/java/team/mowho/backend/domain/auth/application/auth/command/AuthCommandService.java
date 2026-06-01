@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.mowho.backend.domain.auth.application.dto.request.LoginServiceRequest;
+import team.mowho.backend.domain.auth.domain.exception.LoginFailedException;
 import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshToken;
 import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshTokenRepository;
 import team.mowho.backend.domain.member.domain.Member;
@@ -29,10 +30,10 @@ public class AuthCommandService {
 
     public TokenResponse login(LoginServiceRequest request, HttpServletResponse response) {
         Member member = memberRepository.findByLoginId(request.loginId())
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(LoginFailedException::new);
 
         if (!passwordEncoder.matches(request.password(), member.getPassword())) {
-            throw new PasswordNotMatchException();
+            throw new LoginFailedException();
         }
 
         String accessToken = tokenGenerator.generateAccessToken(member.getId());
