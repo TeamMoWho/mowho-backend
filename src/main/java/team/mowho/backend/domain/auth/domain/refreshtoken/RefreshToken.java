@@ -53,7 +53,12 @@ public class RefreshToken extends BaseTimeEntity {
     }
 
     public void validate(String token, Long memberId) {
-        if (!this.memberId.equals(memberId) || !this.tokenHash.equals(hash(token))) {
+        boolean hashMatch = MessageDigest.isEqual(
+                this.tokenHash.getBytes(StandardCharsets.UTF_8),
+                hash(token).getBytes(StandardCharsets.UTF_8)
+        );
+
+        if (!this.memberId.equals(memberId) || !hashMatch) {
             throw new RefreshTokenNotValidException();
         }
         if (LocalDateTime.now().isAfter(this.expiredAt)) {
