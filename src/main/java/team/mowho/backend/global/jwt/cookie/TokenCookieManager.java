@@ -21,11 +21,11 @@ public class TokenCookieManager {
     public void injectTokensToCookie(TokenResponse tokenResponse, HttpServletResponse response) {
         addCookie(
                 TokenType.ACCESS.getCookieName(), tokenResponse.accessToken(),
-                (int)tokenProperties.expirationTime().accessToken() + COOKIE_EXPIRY_BUFFER_SECONDS, response
+                Math.toIntExact(tokenProperties.expirationTime().accessToken() + COOKIE_EXPIRY_BUFFER_SECONDS), response
         );
         addCookie(
                 TokenType.REFRESH.getCookieName(), tokenResponse.refreshToken(),
-                (int)tokenProperties.expirationTime().refreshToken() + COOKIE_EXPIRY_BUFFER_SECONDS, response
+                Math.toIntExact(tokenProperties.expirationTime().refreshToken() + COOKIE_EXPIRY_BUFFER_SECONDS), response
         );
     }
 
