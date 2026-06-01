@@ -45,6 +45,11 @@ public class JwtTokenResolver {
         return getClaims(token).getPayload().getSubject();
     }
 
+    public boolean isAccessToken(String token) {
+        String type = getClaims(token).getPayload().get("type", String.class);
+        return TokenType.ACCESS.getClaimValue().equals(type);
+    }
+
     private static Optional<String> resolveFromHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(AUTHORIZATION))
                 .filter(auth -> StringUtils.hasText(auth) && BEARER_PATTERN.matcher(auth).matches())

@@ -34,6 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         try {
             jwtTokenResolver.resolveTokenFromRequest(request)
+                    .filter(jwtTokenResolver::isAccessToken)
                     .ifPresent(token -> setAuthentication(request, token));
         } catch (ExpiredJwtException e) {
             log.debug("액세스 토큰이 만료되었습니다.");
