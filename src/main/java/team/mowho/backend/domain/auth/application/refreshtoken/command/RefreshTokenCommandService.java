@@ -52,7 +52,7 @@ public class RefreshTokenCommandService {
         try {
             return Long.parseLong(tokenResolver.getSubjectFromToken(token));
         } catch (Exception e) {
-            throw new RefreshTokenNotValidException();
+            throw new RefreshTokenNotValidException(e);
         }
     }
 
