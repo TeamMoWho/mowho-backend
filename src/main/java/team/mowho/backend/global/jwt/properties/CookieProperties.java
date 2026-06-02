@@ -1,5 +1,6 @@
 package team.mowho.backend.global.jwt.properties;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ public record CookieProperties(
 
         boolean secure,
 
+        @NotBlank(message = "sameSite는 비워둘 수 없습니다.")
         @Pattern(
                 regexp = "^(Strict|Lax|None)$",
                 message = "sameSite는 Strict, Lax, None 중 하나여야 합니다."
