@@ -5,11 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
+import team.mowho.backend.global.config.properties.CorsProperties;
+import team.mowho.backend.global.jwt.filter.JwtTokenFilter;
+import team.mowho.backend.global.jwt.resolver.JwtTokenResolver;
 
 import java.util.List;
 
@@ -28,7 +33,10 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
+            "/api/auth/login"
     };
+
+    private final CorsProperties corsProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,13 +44,23 @@ public class SecurityConfig {
     }
 
     @Bean
+    public JwtTokenFilter jwtTokenFilter(
+            JwtTokenResolver jwtTokenResolver,
+            UserDetailsService userDetailsService
+    ) {
+        return new JwtTokenFilter(jwtTokenResolver, userDetailsService);
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity httpSecurity
+            HttpSecurity httpSecurity,
+            JwtTokenFilter jwtTokenFilter
     ) throws Exception {
         disableSecurityBasic(httpSecurity);
         configureSessionManagement(httpSecurity);
         configureCorsPolicy(httpSecurity);
         configureApiAuthorization(httpSecurity);
+        configureFilter(httpSecurity, jwtTokenFilter);
 
         return httpSecurity.build();
     }
@@ -58,10 +76,10 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
     }
 
-    //TODO: CORS 허용 로직 추가
     private void configureCorsPolicy(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(cors -> cors.configurationSource(request -> {
             var corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
             corsConfiguration.setAllowedMethods(ALLOWED_METHODS);
             corsConfiguration.setAllowedHeaders(ALLOWED_HEADERS);
             corsConfiguration.setExposedHeaders(EXPOSED_HEADERS);
@@ -75,8 +93,13 @@ public class SecurityConfig {
                 authorize.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .requestMatchers(POST, "/api/members").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().hasAnyRole("MEMBER", "ADMIN")
         );
+    }
+
+    private void configureFilter(HttpSecurity httpSecurity, JwtTokenFilter jwtTokenFilter) throws Exception {
+        httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }
