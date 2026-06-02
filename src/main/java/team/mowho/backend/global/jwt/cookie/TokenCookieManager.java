@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import team.mowho.backend.global.jwt.TokenType;
 import team.mowho.backend.global.jwt.dto.response.TokenResponse;
 import team.mowho.backend.global.jwt.properties.CookieProperties;
@@ -33,6 +34,9 @@ public class TokenCookieManager {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
+        if (StringUtils.hasText(cookieProperties.domain())) {
+            cookie.setDomain(cookieProperties.domain());
+        }
         cookie.setHttpOnly(cookieProperties.httpOnly());
         cookie.setSecure(cookieProperties.secure());
         cookie.setAttribute("SameSite", cookieProperties.sameSite());
@@ -44,6 +48,9 @@ public class TokenCookieManager {
         Cookie cookie = new Cookie(name, null);
         cookie.setPath("/");
         cookie.setMaxAge(0);
+        if (StringUtils.hasText(cookieProperties.domain())) {
+            cookie.setDomain(cookieProperties.domain());
+        }
         cookie.setHttpOnly(cookieProperties.httpOnly());
         cookie.setSecure(cookieProperties.secure());
         cookie.setAttribute("SameSite", cookieProperties.sameSite());
