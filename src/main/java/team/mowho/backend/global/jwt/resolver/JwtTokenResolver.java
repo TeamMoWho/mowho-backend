@@ -16,7 +16,6 @@ import javax.crypto.SecretKey;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
