@@ -10,8 +10,6 @@ import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshToken;
 import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshTokenRepository;
 import team.mowho.backend.domain.member.domain.Member;
 import team.mowho.backend.domain.member.domain.MemberRepository;
-import team.mowho.backend.domain.member.domain.exception.MemberNotFoundException;
-import team.mowho.backend.domain.member.domain.exception.PasswordNotMatchException;
 import team.mowho.backend.global.jwt.cookie.TokenCookieManager;
 import team.mowho.backend.global.jwt.dto.response.TokenResponse;
 import team.mowho.backend.global.jwt.generator.JwtTokenGenerator;
