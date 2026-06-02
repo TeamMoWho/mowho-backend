@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.mowho.backend.domain.auth.application.dto.request.LoginServiceRequest;
 import team.mowho.backend.domain.auth.domain.exception.LoginFailedException;
 import team.mowho.backend.domain.auth.domain.refreshtoken.RefreshToken;
@@ -26,6 +27,7 @@ public class AuthCommandService {
     private final TokenProperties tokenProperties;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public TokenResponse login(LoginServiceRequest request, HttpServletResponse response) {
         Member member = memberRepository.findByLoginId(request.loginId())
                 .orElseThrow(LoginFailedException::new);
