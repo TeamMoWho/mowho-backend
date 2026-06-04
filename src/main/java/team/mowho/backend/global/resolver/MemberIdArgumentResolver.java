@@ -37,7 +37,7 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
                     .map(Long::valueOf)
                     .orElseThrow(LoginFailedException::new);
         } catch (NumberFormatException e) {
-            throw new LoginFailedException();
+            throw new LoginFailedException(e);
         }
     }
 
