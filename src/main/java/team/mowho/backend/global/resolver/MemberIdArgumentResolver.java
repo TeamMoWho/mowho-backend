@@ -31,10 +31,14 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(Authentication::getName)
-                .map(Long::valueOf)
-                .orElseThrow(LoginFailedException::new);
+        try {
+            return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                    .map(Authentication::getName)
+                    .map(Long::valueOf)
+                    .orElseThrow(LoginFailedException::new);
+        } catch (NumberFormatException e) {
+            throw new LoginFailedException();
+        }
     }
 
 }
