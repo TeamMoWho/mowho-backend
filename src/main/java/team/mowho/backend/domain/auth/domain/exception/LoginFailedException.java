@@ -8,5 +8,9 @@ public class LoginFailedException extends CustomException {
         super(AuthExceptionCode.LOGIN_FAILED);
     }
 
+    public LoginFailedException(Throwable cause) {
+        super(AuthExceptionCode.LOGIN_FAILED, cause);
+    }
+
 }
 
