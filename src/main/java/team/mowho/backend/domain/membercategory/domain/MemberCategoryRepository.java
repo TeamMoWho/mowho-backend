@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface MemberCategoryRepository {
 
-    void saveAll(List<MemberCategory> memberCategories);
+    List<MemberCategory> saveAll(List<MemberCategory> memberCategories);
 
     void deleteAllByMemberId(Long memberId);
 

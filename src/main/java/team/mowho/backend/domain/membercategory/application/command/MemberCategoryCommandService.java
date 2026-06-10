@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.mowho.backend.domain.category.domain.CategoryRepository;
 import team.mowho.backend.domain.category.domain.exception.CategoryNotFoundException;
-import team.mowho.backend.domain.membercategory.application.request.SelectCategoryServiceRequest;
+import team.mowho.backend.domain.membercategory.application.dto.request.SelectCategoryServiceRequest;
+import team.mowho.backend.domain.membercategory.application.dto.response.SelectCategoryResponse;
 import team.mowho.backend.domain.membercategory.domain.MemberCategory;
 import team.mowho.backend.domain.membercategory.domain.MemberCategoryRepository;
 
@@ -19,9 +20,15 @@ public class MemberCategoryCommandService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void selectCategories(SelectCategoryServiceRequest request) {
+    public SelectCategoryResponse selectCategories(SelectCategoryServiceRequest request) {
         validateCategories(request.categoryIds());
-        replaceCategories(request.memberId(), request.categoryIds());
+        List<MemberCategory> savedCategories = replaceCategories(request.memberId(), request.categoryIds());
+
+        return SelectCategoryResponse.builder()
+                .categoryIds(savedCategories.stream()
+                        .map(MemberCategory::getCategoryId)
+                        .toList())
+                .build();
     }
 
     private void validateCategories(List<Long> categoryIds) {
@@ -32,14 +39,14 @@ public class MemberCategoryCommandService {
         });
     }
 
-    private void replaceCategories(Long memberId, List<Long> categoryIds) {
+    private List<MemberCategory> replaceCategories(Long memberId, List<Long> categoryIds) {
         memberCategoryRepository.deleteAllByMemberId(memberId);
 
         List<MemberCategory> memberCategories = categoryIds.stream()
                 .map(categoryId -> MemberCategory.of(memberId, categoryId))
                 .toList();
 
-        memberCategoryRepository.saveAll(memberCategories);
+        return memberCategoryRepository.saveAll(memberCategories);
     }
 
 }

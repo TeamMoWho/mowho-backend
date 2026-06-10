@@ -3,7 +3,7 @@ package team.mowho.backend.domain.membercategory.presentation.request;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import team.mowho.backend.domain.membercategory.application.request.SelectCategoryServiceRequest;
+import team.mowho.backend.domain.membercategory.application.dto.request.SelectCategoryServiceRequest;
 
 import java.util.List;
 

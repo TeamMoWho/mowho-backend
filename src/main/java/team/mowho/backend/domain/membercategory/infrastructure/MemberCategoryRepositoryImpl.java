@@ -14,8 +14,8 @@ public class MemberCategoryRepositoryImpl implements MemberCategoryRepository {
     private final MemberCategoryJpaRepository memberCategoryJpaRepository;
 
     @Override
-    public void saveAll(List<MemberCategory> memberCategories) {
-        memberCategoryJpaRepository.saveAll(memberCategories);
+    public List<MemberCategory> saveAll(List<MemberCategory> memberCategories) {
+        return memberCategoryJpaRepository.saveAll(memberCategories);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package team.mowho.backend.domain.membercategory.application.request;
+package team.mowho.backend.domain.membercategory.application.dto.request;
 
 import lombok.Builder;
 
