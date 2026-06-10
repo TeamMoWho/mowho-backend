@@ -43,6 +43,7 @@ public class MemberCategoryCommandService {
         memberCategoryRepository.deleteAllByMemberId(memberId);
 
         List<MemberCategory> memberCategories = categoryIds.stream()
+                .distinct()
                 .map(categoryId -> MemberCategory.of(memberId, categoryId))
                 .toList();
 
