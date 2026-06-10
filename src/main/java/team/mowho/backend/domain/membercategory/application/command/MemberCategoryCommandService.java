@@ -3,6 +3,7 @@ package team.mowho.backend.domain.membercategory.application.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.mowho.backend.domain.category.domain.Category;
 import team.mowho.backend.domain.category.domain.CategoryRepository;
 import team.mowho.backend.domain.category.domain.exception.CategoryNotFoundException;
 import team.mowho.backend.domain.membercategory.application.dto.request.SelectCategoryServiceRequest;
@@ -32,11 +33,14 @@ public class MemberCategoryCommandService {
     }
 
     private void validateCategories(List<Long> categoryIds) {
-        categoryIds.forEach(categoryId -> {
-            if (!categoryRepository.existsByCategoryId(categoryId)) {
-                throw new CategoryNotFoundException();
-            }
-        });
+        List<Long> foundIds = categoryRepository.findAllByCategoryIds(categoryIds)
+                .stream()
+                .map(Category::getId)
+                .toList();
+
+        if (foundIds.size() != categoryIds.stream().distinct().count()) {
+            throw new CategoryNotFoundException();
+        }
     }
 
     private List<MemberCategory> replaceCategories(Long memberId, List<Long> categoryIds) {

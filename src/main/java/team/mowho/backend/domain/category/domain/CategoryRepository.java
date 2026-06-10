@@ -9,6 +9,6 @@ public interface CategoryRepository {
 
     List<Category> findAll();
 
-    boolean existsByCategoryId(Long categoryId);
+    List<Category> findAllByCategoryIds(List<Long> categoryIds);
 
 }

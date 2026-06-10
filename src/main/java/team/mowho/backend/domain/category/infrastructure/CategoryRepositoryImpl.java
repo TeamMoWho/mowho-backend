@@ -25,8 +25,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public boolean existsByCategoryId(Long categoryId) {
-        return categoryJpaRepository.existsById(categoryId);
+    public List<Category> findAllByCategoryIds(List<Long> categoryIds) {
+        return categoryJpaRepository.findAllByCategoryIds(categoryIds);
     }
 
 }
