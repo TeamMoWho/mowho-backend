@@ -1,4 +1,4 @@
-package team.mowho.backend.domain.member.domain;
+package team.mowho.backend.domain.membercategory.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
