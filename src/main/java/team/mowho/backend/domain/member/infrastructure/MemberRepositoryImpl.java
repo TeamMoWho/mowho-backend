@@ -45,4 +45,9 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .orElseThrow(MemberNotFoundException::new);
     }
 
+    @Override
+    public Optional<Member> findWithLockByMemberId(Long memberId) {
+        return memberJpaRepository.findWithLockByMemberId(memberId);
+    }
+
 }

@@ -16,4 +16,6 @@ public interface MemberRepository {
 
     Member findByMemberId(Long id);
 
+    Optional<Member> findWithLockByMemberId(Long memberId);
+
 }

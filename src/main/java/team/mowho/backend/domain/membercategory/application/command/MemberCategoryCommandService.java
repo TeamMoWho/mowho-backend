@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import team.mowho.backend.domain.category.domain.Category;
 import team.mowho.backend.domain.category.domain.CategoryRepository;
 import team.mowho.backend.domain.category.domain.exception.CategoryNotFoundException;
+import team.mowho.backend.domain.member.domain.MemberRepository;
+import team.mowho.backend.domain.member.domain.exception.MemberNotFoundException;
 import team.mowho.backend.domain.membercategory.application.dto.request.SelectCategoryServiceRequest;
 import team.mowho.backend.domain.membercategory.application.dto.response.SelectCategoryResponse;
 import team.mowho.backend.domain.membercategory.domain.MemberCategory;
@@ -18,10 +20,13 @@ import java.util.List;
 public class MemberCategoryCommandService {
 
     private final MemberCategoryRepository memberCategoryRepository;
+    private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
 
     @Transactional
     public SelectCategoryResponse selectCategories(SelectCategoryServiceRequest request) {
+        memberRepository.findWithLockByMemberId(request.memberId())
+                .orElseThrow(MemberNotFoundException::new);
         validateCategories(request.categoryIds());
         List<MemberCategory> savedCategories = replaceCategories(request.memberId(), request.categoryIds());
 
